@@ -25,7 +25,7 @@ public class RunDriver {
 		 *  generating a tree with L levels and  N random childs  between minChildren and maxChildren
 		 *  Node createTree( int levelsCount, int minChildren, int maxChildren )
 		 */
-		Node root = treeNode.createTree(7, 2, 5);
+		Node root = treeNode.createTree(10, 2,5);
 				
 		/* Requirement  3
 		 * Creating a tree output sample as requested in Requirement 3

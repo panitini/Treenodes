@@ -14,7 +14,7 @@ import com.krian.node.Node;
 public class TreeNodeTraverse {
 
 	/** The color array. */
-	String[] colorArray = { "blue", "yellow", "green" };
+	String[] colorArray = { "blue", "green", "yellow" };
 
 	/** The k value for node increment */
 	int k = 0;
@@ -26,7 +26,7 @@ public class TreeNodeTraverse {
 	ArrayList<Node> colorNodes;
 
 	/** The root node */
-	Node rndNodetemp; 
+	Node rndNodetemp;
 
 	/** The set of color spots */
 	String colorSpotSet = "";
@@ -144,7 +144,7 @@ public class TreeNodeTraverse {
 	public void writeUsingFiles(String file) {
 		StringBuilder colorBuilder = new StringBuilder();
 		StringBuilder treeBuilder = new StringBuilder();
-		 nodeList = new ArrayList<Node>();
+		nodeList = new ArrayList<Node>();
 		traverse(rndNodetemp);
 		for (Node n : nodeList) {
 			colorBuilder.append("\t" + "\"" + n.getNodeId() + "\"" + "[color=" + n.getColor() + "]\n");
@@ -173,7 +173,7 @@ public class TreeNodeTraverse {
 	 */
 	public ArrayList<Node> colorNodes(String color) {
 		colorNodes = new ArrayList<Node>();
-		 nodeList = new ArrayList<Node>();
+		nodeList = new ArrayList<Node>();
 		traverse(rndNodetemp);
 		for (Node n : nodeList) {
 			if (n.getColor().equalsIgnoreCase(color)) {
@@ -183,24 +183,23 @@ public class TreeNodeTraverse {
 		nodeList.clear();
 		return colorNodes;
 	}
+
 	/**
 	 * adding sizes of nodes= tree size
 	 * 
 	 * @return size --> return size
 	 */
 	public int treeSize() {
-		 int size=0;
-		 nodeList = new ArrayList<Node>();
+		int size = 0;
+		nodeList = new ArrayList<Node>();
 		traverse(rndNodetemp);
 		for (Node n : nodeList) {
-			size =n.getSize()+size;
+			size = n.getSize() + size;
 		}
 		nodeList.clear();
 		return size;
 	}
-	
-	
-	
+
 	/**
 	 * extracting the color spots for requirement 5. color spot is a group of
 	 * minimum 3 "inter-connected" nodes having the same color.
@@ -208,7 +207,10 @@ public class TreeNodeTraverse {
 	 * @param root
 	 *            the root
 	 * @return the string -> all color spots are concatenated into one string
+	 *
 	 */
+	String colorNset = "";
+	ArrayList<String> tempString = new ArrayList<String>();
 	public String colorSpots(Node root) {
 
 		if (root.getNodeId() == 1) {
@@ -224,15 +226,59 @@ public class TreeNodeTraverse {
 				for (Node node : childern) {
 					if (root.getParent().getColor().equalsIgnoreCase(root.getColor())) {
 						if (root.getColor().equalsIgnoreCase(node.getColor())) {
-							colorSpotSet = root.getParent().getColor() + " " + root.getParent().getNodeId() + " "
-									+ root.getNodeId() + " " + node.getNodeId() + "\n" + colorSpotSet;
+							colorNset = root.getParent().getColor() + " " + root.getParent().getNodeId() + " "
+									+ root.getNodeId() + " " ;
+							colorSpotSet = colorSpotSet + "\n" + colorNset+ node.getNodeId();
+							recursiveColorSpots(node);
+							for(String s:tempString) {
+								colorSpotSet=colorSpotSet+"\n"+s;
+							}
+							tempString.clear();
 						}
 					}
+
 					colorSpots(node);
 				}
 			}
 		}
+		
+		
 		return colorSpotSet;
+	}
+
+	
+
+	
+	int y=0;
+	private void recursiveColorSpots(Node node) {
+		
+		
+		
+	
+
+		Node[] childernNew = node.getChilds();
+		if (childernNew != null) {
+			y++;
+			String paNode ="";
+			Node tempNode= node;
+			for (int t=0;t<y;t++) {
+				if(tempNode!=null) {
+					paNode=tempNode.getNodeId()+" "+paNode;
+					tempNode=tempNode.getParent();
+				}
+				
+			}
+          
+			for (Node nodeNew : childernNew) {
+				if ((node.getColor().equalsIgnoreCase(nodeNew.getColor()))) {
+					tempString.add(colorNset+ paNode+" " + nodeNew.getNodeId());
+					recursiveColorSpots(nodeNew);
+
+				}
+			}
+			y=0;
+		}
+
 	}
 
 }
